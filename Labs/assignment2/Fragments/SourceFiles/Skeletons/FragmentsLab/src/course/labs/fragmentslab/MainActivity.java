@@ -86,7 +86,7 @@ public class MainActivity extends Activity implements
                     .beginTransaction();
 
             //http://developer.android.com/training/basics/fragments/fragment-ui.html
-            
+
             // Add the TitleFragment to the layout
             fragmentTransaction.replace(R.id.fragment_container, mFeedFragment);
             fragmentTransaction.addToBackStack(null);
