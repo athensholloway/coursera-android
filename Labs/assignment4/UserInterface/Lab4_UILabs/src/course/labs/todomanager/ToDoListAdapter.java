@@ -3,6 +3,7 @@ package course.labs.todomanager;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -82,54 +83,88 @@ public class ToDoListAdapter extends BaseAdapter {
     // Consider using the ViewHolder pattern to make scrolling more efficient
     // See: http://developer.android.com/training/improving-layouts/smooth-scrolling.html
 
+    //http://www.javacodegeeks.com/2013/09/android-viewholder-pattern-example.html
+    static class ViewHolder {
+        TextView title;
+        TextView priority;
+        CheckBox  status;
+        TextView date;
+    }
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
 
-		// TODO - Get the current ToDoItem
-		final ToDoItem toDoItem = null;
+        /*
+        * The convertView argument is essentially a "ScrapView" as described is Lucas post
+        * http://lucasr.org/2012/04/05/performance-tips-for-androids-listview/
+        * It will have a non-null value when ListView is asking you recycle the row layout.
+        * So, when convertView is not null, you should simply update its contents instead of inflating a new row layout.
+        */
+        if(convertView==null){
 
+            // TODO - Inflate the View for this ToDoItem
+            // from todo_item.xml.
+            // inflate the layout
+            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            convertView = inflater.inflate(R.layout.todo_item, parent, false);
 
-		// TODO - Inflate the View for this ToDoItem
-		// from todo_item.xml.
+            // well set up the ViewHolder
+            viewHolder = new ViewHolder();
+            viewHolder.title = (TextView) convertView.findViewById(R.id.title);
+            viewHolder.priority = (TextView) convertView.findViewById(R.id.priority);
+            viewHolder.status = (CheckBox) convertView.findViewById(R.id.statusCheckBox);
+            viewHolder.date = (TextView) convertView.findViewById(R.id.date);
 
+            // store the holder with the view.
+            convertView.setTag(viewHolder);
 
-		// TODO - Fill in specific ToDoItem data
-		// Remember that the data that goes in this View
-		// corresponds to the user interface elements defined
-		// in the layout file
+        }else{
+            // we've just avoided calling findViewById() on resource everytime
+            // just use the viewHolder
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
 
-		// TODO - Display Title in TextView
+        // TODO - Get the current ToDoItem
+        final ToDoItem toDoItem = mItems.get(position);
 
+        if(toDoItem != null){
 
-		// TODO - Set up Status CheckBox
+            // TODO - Fill in specific ToDoItem data
+            // Remember that the data that goes in this View
+            // corresponds to the user interface elements defined
+            // in the layout file
+            // TODO - Display Title in TextView
+            viewHolder.title.setText(toDoItem.getTitle());
 
-        final CheckBox statusView = null;
-        
-        // TODO - Must also set up an OnCheckedChangeListener,
-        // which is called when the user toggles the status checkbox
+            // TODO - Set up Status CheckBox
+            /*
+            final CheckBox statusView = null;
+            // TODO - Must also set up an OnCheckedChangeListener,
+            // which is called when the user toggles the status checkbox
+            */
 
-        statusView
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						Log.i(TAG,"Entered onCheckedChanged()");
+            viewHolder.status.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView,
+                                             boolean isChecked) {
+                    Log.i(TAG,"Entered onCheckedChanged()");
+                    toDoItem.setStatus( isChecked ? Status.DONE : Status.NOTDONE);
+                }
+            });
 
+            viewHolder.status.setChecked(toDoItem.getStatus() == Status.DONE);
 
-                        
-                        
-                        
-					}
-				});
+            // TODO - Display Priority in a TextView
+            viewHolder.priority.setText(toDoItem.getPriority().toString());
 
-		// TODO - Display Priority in a TextView
+            // TODO - Display Time and Date
+            viewHolder.date.setText(ToDoItem.FORMAT.format(toDoItem.getDate()));
 
-
-		// TODO - Display Time and Date
-
+        }
 
 		// Return the View you just created
-		return null;
+		return convertView;
 
 	}
 }

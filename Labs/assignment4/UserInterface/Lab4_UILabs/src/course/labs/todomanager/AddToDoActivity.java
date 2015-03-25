@@ -95,9 +95,8 @@ public class AddToDoActivity extends Activity {
 				Log.i(TAG, "Entered cancelButton.OnClickListener.onClick()");
 
 				// TODO - Indicate result and finish
-
-                
-                
+                setResult(RESULT_CANCELED);
+                finish();
 			}
 		});
 
@@ -109,11 +108,10 @@ public class AddToDoActivity extends Activity {
 				Log.i(TAG, "Entered resetButton.OnClickListener.onClick()");
 
 				// TODO - Reset data to default values
+                mTitleText.setText("");
+                mDefaultStatusButton.setChecked(true);
+                mDefaultPriorityButton.setChecked(true);
 
-
-                
-                
-                
 				// reset date and time
 				setDefaultDateTime();
 			}
@@ -129,14 +127,22 @@ public class AddToDoActivity extends Activity {
 
 				// TODO - gather ToDoItem data
 
-				// Get Priority
-				Priority priority = null;
+                // find the radiobutton by returned id
+                //final RadioButton selectedPriority = (RadioButton) findViewById(mPriorityRadioGroup.getCheckedRadioButtonId());
+                //final String priorityValue = selectedPriority.getText().toString().toUpperCase();
 
-				// Get Status
-				Status status = null;
+                // Get Priority
+				Priority priority = getPriority();//Priority.valueOf(priorityValue);
+
+
+                //final RadioButton selectedStatus = (RadioButton) findViewById(mStatusRadioGroup.getCheckedRadioButtonId());
+                //final String statusValue = selectedStatus.getText().toString().toUpperCase();
+
+                // Get Status
+				Status status = getStatus(); //Status.valueOf(statusValue);
 
 				// Title
-				String titleString = null;
+				String titleString = ((EditText) findViewById(R.id.title)).getText().toString();
 
 				// Date
 				String fullDate = dateString + " " + timeString;
@@ -146,7 +152,11 @@ public class AddToDoActivity extends Activity {
 				ToDoItem.packageIntent(data, titleString, priority, status,
 						fullDate);
 
-				// TODO - return data Intent and finish
+                // TODO - Set Activity's result with result code RESULT_OK
+                setResult(RESULT_OK, data);
+
+                // TODO - Finish the Activity
+                finish();
 
 
             

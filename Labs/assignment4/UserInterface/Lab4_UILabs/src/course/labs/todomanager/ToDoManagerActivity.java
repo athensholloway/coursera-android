@@ -49,15 +49,12 @@ public class ToDoManagerActivity extends ListActivity {
 
 		// TODO - Inflate footerView for footer_view.xml file
 
-		TextView footerView = null;
-        
-        // NOTE: You can remove this block once you've implemented the assignment
-        if (null == footerView) {
-            return;
-        }
+		TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer_view, null);
+        //TextView footerView =  ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_layout, null, false);
 
-		// TODO - Add footerView to ListView
 
+        // TODO - Add footerView to ListView
+        getListView().addFooterView(footerView);
         
         
 		// TODO - Attach Listener to FooterView
@@ -66,12 +63,27 @@ public class ToDoManagerActivity extends ListActivity {
 			public void onClick(View v) {
 
 				Log.i(TAG, "Entered footerView.OnClickListener.onClick()");
-
 				//TODO - Implement onClick().
+                //statically get context
+                //http://stackoverflow.com/questions/5447092/get-context-inside-onclickdialoginterface-v-int-buttonid
+                final Intent intent = new Intent(ToDoManagerActivity.this, AddToDoActivity.class);
+                startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
             }
 		});
 
 		// TODO - Attach the adapter to this ListActivity's ListView
+        //http://developer.android.com/reference/android/app/ListActivity.html
+        /*final ListAdapter listAdapter = new ToDoListAdapter(
+                this,
+                R.layout.todo_item,
+                toDoItems,
+                new String[]{ToDoItem.TITLE, ToDoItem.STATUS, ToDoItem.PRIORITY, ToDoItem.DATE},
+                new int[] {R.id.titleView, R.id.statusCheckBox, R.id.priorityView, R.id.dateView}
+
+        );
+        */
+
+        getListView().setAdapter(new ToDoListAdapter(this));
 
     }
 
@@ -84,12 +96,9 @@ public class ToDoManagerActivity extends ListActivity {
 		// if user submitted a new ToDoItem
 		// Create a new ToDoItem from the data Intent
 		// and then add it to the adapter
-
-
-            
-            
-            
-		
+        if(requestCode == ADD_TODO_ITEM_REQUEST && resultCode == RESULT_OK){
+            mAdapter.add(new ToDoItem(data));
+        }
 	}
 
 	// Do not modify below here
