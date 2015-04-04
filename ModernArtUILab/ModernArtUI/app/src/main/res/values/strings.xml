@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Modern Art UI</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="more_information_dilog_title">Inspired by the works of artists such as Piet Mondrian and Ben Nicholson</string>
+    <string name="more_information_dilog_message">Click below to learn more!</string>
+    <string name="more_information_dilog_OK">Visit MOMA</string>
+    <string name="more_information_dilog_Cancel">Not Now</string>
+
+</resources>
